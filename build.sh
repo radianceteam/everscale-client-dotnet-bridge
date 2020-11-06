@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -7,17 +7,22 @@ PROJECT_NAME="TON CLIENT DOTNET BRIDGE"
 DO_CLEAN=0
 FIND_LEAKS=0
 SKIP_TESTS=0
+SKIP_INSTALL=0
 BUILD_TYPE=Release
 BUILD_DIR=cmake-build-release
 SKIP_BUILDING_THIRD_PARTY_LIBS=0
+INSTALL_PREFIX=$(pwd)/install
 
-while getopts ":SscTl" opt; do
+while getopts ":SscITl" opt; do
   case ${opt} in
     S ) # skip building third party libs
       SKIP_BUILDING_THIRD_PARTY_LIBS=1
       ;;
     c ) # clean build directories
       DO_CLEAN=1
+      ;;
+    I ) # skip installation step
+      SKIP_INSTALL=1
       ;;
     T ) # skip testing step
       SKIP_TESTS=1
@@ -61,6 +66,7 @@ mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR} || exit
 
 cmake .. \
+  -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
   -DTON_SKIP_TESTS=${SKIP_TESTS} \
   -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
   -DTON_FIND_LEAKS=${FIND_LEAKS}
@@ -73,6 +79,14 @@ if [ "${SKIP_TESTS}" -ne "1" ]; then
     CTEST_COMMAND="${CTEST_COMMAND} -D ExperimentalMemCheck"
   fi
   bash -c "${CTEST_COMMAND}"
+fi
+
+if [ "${SKIP_INSTALL}" -ne "1" ]; then
+  echo "Installing ${PROJECT_NAME} into ${INSTALL_PREFIX}."
+  make install
+  echo "${PROJECT_NAME} is successfully installed into ${INSTALL_PREFIX}."
+else
+  echo "Skipping installation."
 fi
 
 echo "${PROJECT_NAME} build finished."
