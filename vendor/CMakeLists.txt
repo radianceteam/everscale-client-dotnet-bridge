@@ -10,7 +10,7 @@ set(TON_SDK_PATH ${CMAKE_BINARY_DIR}/ton-sdk-${TON_SDK_VERSION})
 if (TON_SDK_TARGET)
     set(TON_SDK_BUILD_COMMAND cargo +stable-${TON_SDK_TARGET} build --target=${TON_SDK_TARGET} --release)
 else ()
-    set(TON_SDK_BUILD_COMMAND cargo +${TON_SDK_TARGET} build --release)
+    set(TON_SDK_BUILD_COMMAND cargo build --release)
 endif ()
 
 ExternalProject_Add(
