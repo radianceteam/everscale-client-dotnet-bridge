@@ -1,4 +1,4 @@
-﻿# TON SDK Dotnet Bridge
+﻿# TON SDK .NET Bridge
 
 Bridge is aimed to solve issues with TON struct marshalling to managed code and vice versa.
 
@@ -19,10 +19,6 @@ mapped to .NET simple types, like, `IntPtr`.
 
 https://visualstudio.microsoft.com/downloads/
 
-### Linux/MacOS
-
-TBD: prerequisites; how to install them.
-
 ## Build
 
 ### Windows
@@ -34,9 +30,5 @@ TBD: prerequisites; how to install them.
 ### Linux/MacOS
 
 ```
-./build.sh
+./build.sh 
 ```
-
-## TODO
-
-Move to separate repo, create .github build scripts, setup matrix build, publish binaries on GitHub?

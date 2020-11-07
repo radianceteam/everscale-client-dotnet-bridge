@@ -1,6 +1,6 @@
 ﻿@echo off
 
-set PROJECT_NAME=TON CLIENT DOTNET BRIDGE
+set PROJECT_NAME=TON CLIENT .NET BRIDGE
 set ROOT_DIR=%cd%
 set INSTALL_DIR=%ROOT_DIR%\install
 set TON_SDK_TARGET=x86_64-pc-windows-msvc
