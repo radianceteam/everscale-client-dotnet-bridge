@@ -17,8 +17,6 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 nmake
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-if not exist .\vendor\build mkdir .\vendor\build
-
 cd %ROOT_DIR%
 
 echo Building %PROJECT_NAME%.
