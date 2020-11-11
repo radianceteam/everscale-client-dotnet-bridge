@@ -4,7 +4,7 @@ project(ton-client-dotnet-bridge-third-party-libs)
 
 include(ExternalProject)
 
-set(TON_SDK_VERSION 1.1.0-rc)
+set(TON_SDK_VERSION 1.1.0)
 set(TON_SDK_PATH ${CMAKE_BINARY_DIR}/ton-sdk-${TON_SDK_VERSION})
 
 if (TON_SDK_TARGET)
