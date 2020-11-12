@@ -12,7 +12,7 @@ PROJECT_NAME="TON SDK"
 DO_CLEAN=0
 BUILD_TYPE=Release
 BUILD_DIR=build
-INSTALL_PREFIX=install
+INSTALL_PREFIX=$(pwd)/install
 
 while getopts ":cI" opt; do
   case ${opt} in
