@@ -52,4 +52,4 @@ goto:eof
 echo usage: build.bat platform version
 echo allowed values for platform are: x64, x86
 echo example: build.bat x64 1.1.0
-goto:eof
+exit 1
