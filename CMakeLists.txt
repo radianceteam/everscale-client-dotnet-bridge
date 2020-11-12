@@ -1,20 +1,23 @@
 ﻿cmake_minimum_required(VERSION 3.9)
 
-set(TC_VERSION_MAJOR 1)
-set(TC_VERSION_MINOR 1)
-set(TC_VERSION_PATCH 0)
-set(TC_VERSION_SUFFIX "")
-set(TC_VERSION_STRING ${TC_VERSION_MAJOR}.${TC_VERSION_MINOR}.${TC_VERSION_PATCH})
-set(TC_VERSION_FULL ${TC_VERSION_STRING}${TC_VERSION_SUFFIX})
+if (NOT TON_SDK_VERSION)
+    message(FATAL_ERROR "TON_SDK_VERSION property is required")
+endif ()
+
+set(TON_SDK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/build/ton-sdk-${TON_SDK_VERSION}/src/ton-sdk")
+
+if (TON_SDK_TARGET)
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/${TON_SDK_TARGET}/release")
+else ()
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/release")
+endif ()
+
+set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
-
-set(TON_SDK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/build/ton-sdk-${TC_VERSION_FULL}/src/ton-sdk")
-set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
-set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/${TON_SDK_TARGET}/release")
 list(APPEND CMAKE_PREFIX_PATH "${TON_SDK_CLIENT_DIR}" "${TON_SDK_RELEASE_DIR}")
 
-project(tonclient_dotnet_bridge VERSION ${TC_VERSION_STRING})
+project(tonclient_dotnet_bridge VERSION ${TON_SDK_VERSION})
 
 include_directories(include)
 enable_testing()

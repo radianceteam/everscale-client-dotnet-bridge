@@ -2,6 +2,11 @@
 
 set -e
 
+function usage() {
+  echo "Usage: build.sh [-S] [-T] [-s] [-c] [-l] <TON SDK VERSION>"
+  exit
+}
+
 PROJECT_NAME="TON CLIENT .NET BRIDGE"
 
 DO_CLEAN=0
@@ -34,10 +39,18 @@ while getopts ":SscITl" opt; do
     l ) # find memory leaks
       FIND_LEAKS=1
       ;;
-    \? ) echo "Usage: build.sh [-S] [-T] [-s] [-c] [-l]"
+    \? )
+      usage
       ;;
   esac
 done
+
+shift $(($OPTIND - 1))
+TON_SDK_VERSION=$1
+
+if [ "${TON_SDK_VERSION}" = "" ]; then
+  usage
+fi
 
 CWD=$(pwd)
 
@@ -50,7 +63,7 @@ if [ "${SKIP_BUILDING_THIRD_PARTY_LIBS}" -ne "1" ]; then
   fi
   mkdir -p build
   cd build || exit
-  cmake ..
+  cmake .. -DTON_SDK_VERSION="${TON_SDK_VERSION}"
   make
 else
   echo "Not building third party libraries."
@@ -66,6 +79,7 @@ mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR} || exit
 
 cmake .. \
+  -DTON_SDK_VERSION="${TON_SDK_VERSION}" \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
   -DTON_SKIP_TESTS=${SKIP_TESTS} \
   -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \

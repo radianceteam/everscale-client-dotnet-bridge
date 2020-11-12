@@ -1,6 +1,9 @@
-name: CMake Build Matrix
+name: Release
 
-on: [ push ]
+on:
+  push:
+    branches-ignore: *
+    tags: *.*.* # push to versioned tag will trigger this build
 
 jobs:
   build:
@@ -39,6 +42,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: Set version
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Init
         if: matrix.config.init_command
         run: |
@@ -46,14 +53,14 @@ jobs:
 
       - name: Build
         run: |
-          ${{ matrix.config.build_command }}
+          ${{ matrix.config.build_command }} ${{ steps.vars.outputs.tag }}
 
       - name: Upload Logs
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           path: |
-            vendor/build/ton-sdk-1.1.0-rc/src/ton-sdk-stamp/ton-sdk-build-*.log
+            vendor/build/ton-sdk-${{ steps.vars.outputs.tag }}/src/ton-sdk-stamp/ton-sdk-build-*.log
           name: build-logs
 
       - name: Upload Library Artifacts

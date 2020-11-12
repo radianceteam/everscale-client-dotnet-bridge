@@ -4,7 +4,10 @@ project(ton-client-dotnet-bridge-third-party-libs)
 
 include(ExternalProject)
 
-set(TON_SDK_VERSION 1.1.0)
+if (NOT TON_SDK_BRANCH)
+    set(TON_SDK_BRANCH ${TON_SDK_VERSION})
+endif ()
+
 set(TON_SDK_PATH ${CMAKE_BINARY_DIR}/ton-sdk-${TON_SDK_VERSION})
 
 if (TON_SDK_TARGET)
@@ -16,7 +19,7 @@ endif ()
 ExternalProject_Add(
         ton-sdk
         GIT_REPOSITORY https://github.com/tonlabs/TON-SDK.git
-        GIT_TAG ${TON_SDK_VERSION}
+        GIT_TAG ${TON_SDK_BRANCH}
         PREFIX ${TON_SDK_PATH}
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${TON_SDK_BUILD_COMMAND}
