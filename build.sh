@@ -4,7 +4,7 @@ set -e
 
 function usage() {
   echo "Usage: build.sh [-S] [-T] [-s] [-c] [-l] <TON SDK VERSION>"
-  exit
+  exit 1
 }
 
 PROJECT_NAME="TON CLIENT .NET BRIDGE"
@@ -16,7 +16,13 @@ SKIP_INSTALL=0
 BUILD_TYPE=Release
 BUILD_DIR=cmake-build-release
 SKIP_BUILDING_THIRD_PARTY_LIBS=0
-INSTALL_PREFIX=$(pwd)/install
+INSTALL_DIR=/usr/local
+INSTALL_PREFIX=${INSTALL_DIR}/ton_client
+
+if [ ! -w "${INSTALL_DIR}" ]; then
+  echo "Directory ${INSTALL_DIR} is not writable. Trying to install into system directory by non-root user?"
+  exit 1
+fi
 
 while getopts ":SscITl" opt; do
   case ${opt} in
@@ -54,6 +60,12 @@ fi
 
 CWD=$(pwd)
 
+function run_ldconfig() {
+  echo "Running ldconfig..."
+  echo "${INSTALL_PREFIX}/lib" > /etc/ld.so.conf.d/ton.conf
+  ldconfig
+}
+
 if [ "${SKIP_BUILDING_THIRD_PARTY_LIBS}" -ne "1" ]; then
   echo "Building third party libraries."
   cd vendor || exit
@@ -68,6 +80,7 @@ if [ "${SKIP_BUILDING_THIRD_PARTY_LIBS}" -ne "1" ]; then
     -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
   make
   make install
+  run_ldconfig
 else
   echo "Not building third party libraries."
 fi
@@ -79,18 +92,10 @@ if [ "${DO_CLEAN}" -ne "0" ]; then
   rm -rf ${BUILD_DIR}
 fi
 mkdir -p ${BUILD_DIR}
-
-# This is required fo having no relative path to the lib like  ../../ton_client.so
-CMAKE_PREFIX_PATH=$(pwd)/${BUILD_DIR}/src
-mkdir -p "${CMAKE_PREFIX_PATH}/include"
-cp ${INSTALL_PREFIX}/lib/libton_client.* ${CMAKE_PREFIX_PATH}
-cp ${INSTALL_PREFIX}/include/tonclient.h ${CMAKE_PREFIX_PATH}/include
-
 cd ${BUILD_DIR} || exit
 
 cmake .. \
   -DTON_SDK_VERSION="${TON_SDK_VERSION}" \
-  -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}" \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
   -DTON_SKIP_TESTS=${SKIP_TESTS} \
   -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
@@ -109,6 +114,7 @@ fi
 if [ "${SKIP_INSTALL}" -ne "1" ]; then
   echo "Installing ${PROJECT_NAME} into ${INSTALL_PREFIX}."
   make install
+  run_ldconfig
   echo "${PROJECT_NAME} is successfully installed into ${INSTALL_PREFIX}."
 else
   echo "Skipping installation."
