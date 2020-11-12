@@ -4,20 +4,10 @@ if (NOT TON_SDK_VERSION)
     message(FATAL_ERROR "TON_SDK_VERSION property is required")
 endif ()
 
-set(TON_SDK_SRC "${CMAKE_CURRENT_SOURCE_DIR}/vendor/build/ton-sdk-${TON_SDK_VERSION}/src/ton-sdk")
-
-if (TON_SDK_TARGET)
-    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/${TON_SDK_TARGET}/release")
-else ()
-    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/release")
-endif ()
-
-set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
+project(tonclient_dotnet_bridge VERSION ${TON_SDK_VERSION})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
-list(APPEND CMAKE_PREFIX_PATH "${TON_SDK_CLIENT_DIR}" "${TON_SDK_RELEASE_DIR}")
-
-project(tonclient_dotnet_bridge VERSION ${TON_SDK_VERSION})
+list(APPEND CMAKE_PREFIX_PATH "${INSTALL_PREFIX}")
 
 include_directories(include)
 enable_testing()

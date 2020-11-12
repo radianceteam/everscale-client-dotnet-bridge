@@ -26,3 +26,23 @@ ExternalProject_Add(
         INSTALL_COMMAND ""
         BUILD_IN_SOURCE 1
         LOG_BUILD ON)
+
+set(TON_SDK_SRC "${TON_SDK_PATH}/src/ton-sdk")
+
+if (TON_SDK_TARGET)
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/${TON_SDK_TARGET}/release")
+else ()
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/release")
+endif ()
+
+set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
+
+install(FILES "${TON_SDK_CLIENT_DIR}/tonclient.h" DESTINATION include)
+
+if (WIN32)
+    install(FILES "${TON_SDK_RELEASE_DIR}/ton_client.dll.lib" DESTINATION lib RENAME ton_client.lib)
+    install(FILES "${TON_SDK_RELEASE_DIR}/ton_client.dll" DESTINATION bin)
+else ()
+    install(FILES "${TON_SDK_RELEASE_DIR}/libton_client.dylib" DESTINATION lib OPTIONAL)
+    install(FILES "${TON_SDK_RELEASE_DIR}/libton_client.so" DESTINATION lib OPTIONAL)
+endif ()

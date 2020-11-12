@@ -63,8 +63,11 @@ if [ "${SKIP_BUILDING_THIRD_PARTY_LIBS}" -ne "1" ]; then
   fi
   mkdir -p build
   cd build || exit
-  cmake .. -DTON_SDK_VERSION="${TON_SDK_VERSION}"
+  cmake .. \
+    -DTON_SDK_VERSION="${TON_SDK_VERSION}" \
+    -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
   make
+  make install
 else
   echo "Not building third party libraries."
 fi
