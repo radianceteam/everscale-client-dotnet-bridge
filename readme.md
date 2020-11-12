@@ -37,7 +37,7 @@ The following sections describe build procedure for each platform.
 ##### x86
 
 1. Open `x86 Cross Tools Command Prompt for VS 2019`
-2. Run `build.bat x64 <TON SDK VERSION>`
+2. Run `build.bat x86 <TON SDK VERSION>`
 
 #### Linux/MacOS
 
