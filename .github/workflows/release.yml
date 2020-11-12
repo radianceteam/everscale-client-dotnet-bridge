@@ -46,8 +46,8 @@ jobs:
 
       - name: Set version
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-
+        uses: battila7/get-version-action@v2
+        
       - name: Init
         if: matrix.config.init_command
         run: |
@@ -55,7 +55,7 @@ jobs:
 
       - name: Build
         run: |
-          ${{ matrix.config.build_command }} ${{ steps.vars.outputs.tag }}
+          ${{ matrix.config.build_command }} ${{ steps.vars.outputs.version }}
 
       - name: Upload Logs
         uses: actions/upload-artifact@v2
