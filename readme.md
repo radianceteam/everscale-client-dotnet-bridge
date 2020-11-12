@@ -1,10 +1,6 @@
-﻿# TON SDK .NET Bridge
+﻿# TON SDK building scripts
 
-Bridge is aimed to solve issues with TON struct marshalling to managed code and vice versa.
-
-Note: issues with marshalling include passing `tc_string_data_t` by value which looks
-difficult ATM. So here, we're creating a different C API which can be transparently
-mapped to .NET simple types, like, `IntPtr`.
+Just for building TON SDK client binaries from this repo: https://github.com/tonlabs/TON-SDK.
 
 ## Requirements
 

@@ -1,28 +1,48 @@
-﻿cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.9)
 
-if (NOT TON_SDK_VERSION)
-    message(FATAL_ERROR "TON_SDK_VERSION property is required")
+project(ton-client)
+
+include(ExternalProject)
+
+if (NOT TON_SDK_BRANCH)
+    set(TON_SDK_BRANCH ${TON_SDK_VERSION})
 endif ()
 
-project(tonclient_dotnet_bridge VERSION ${TON_SDK_VERSION})
+set(TON_SDK_PATH ${CMAKE_BINARY_DIR}/ton-sdk-${TON_SDK_VERSION})
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
-
-include_directories(include)
-enable_testing()
-
-add_subdirectory(include)
-add_subdirectory(src)
-
-if (NOT TON_SKIP_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
+if (TON_SDK_TARGET)
+    set(TON_SDK_BUILD_COMMAND cargo +stable-${TON_SDK_TARGET} build --target=${TON_SDK_TARGET} --release)
+else ()
+    set(TON_SDK_BUILD_COMMAND cargo build --release)
 endif ()
 
-if (TON_FIND_LEAKS)
-    include(CTest)
-    find_program(MEMORYCHECK_COMMAND valgrind)
-    set(MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
-    set(MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/valgrind_suppress.txt")
+ExternalProject_Add(
+        ton-sdk
+        GIT_REPOSITORY https://github.com/tonlabs/TON-SDK.git
+        GIT_TAG ${TON_SDK_BRANCH}
+        PREFIX ${TON_SDK_PATH}
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${TON_SDK_BUILD_COMMAND}
+        INSTALL_COMMAND ""
+        BUILD_IN_SOURCE 1
+        LOG_BUILD ON)
+
+set(TON_SDK_SRC "${TON_SDK_PATH}/src/ton-sdk")
+
+if (TON_SDK_TARGET)
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/${TON_SDK_TARGET}/release")
+else ()
+    set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/release")
 endif ()
 
+set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
+
+install(FILES "${TON_SDK_CLIENT_DIR}/tonclient.h" DESTINATION include)
+
+if (WIN32)
+    install(FILES "${TON_SDK_RELEASE_DIR}/ton_client.dll.lib" DESTINATION lib RENAME ton_client.lib)
+    install(FILES "${TON_SDK_RELEASE_DIR}/ton_client.dll" DESTINATION bin)
+else ()
+    install(FILES "${TON_SDK_RELEASE_DIR}/libton_client.dylib" DESTINATION lib OPTIONAL)
+    install(FILES "${TON_SDK_RELEASE_DIR}/libton_client.so" DESTINATION lib OPTIONAL)
+endif ()
