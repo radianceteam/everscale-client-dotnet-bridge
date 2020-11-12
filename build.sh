@@ -79,10 +79,18 @@ if [ "${DO_CLEAN}" -ne "0" ]; then
   rm -rf ${BUILD_DIR}
 fi
 mkdir -p ${BUILD_DIR}
+
+# This is required fo having no relative path to the lib like  ../../ton_client.so
+CMAKE_PREFIX_PATH=$(pwd)/${BUILD_DIR}/src
+mkdir -p "${CMAKE_PREFIX_PATH}/include"
+cp ${INSTALL_PREFIX}/lib/libton_client.* ${CMAKE_PREFIX_PATH}
+cp ${INSTALL_PREFIX}/include/tonclient.h ${CMAKE_PREFIX_PATH}/include
+
 cd ${BUILD_DIR} || exit
 
 cmake .. \
   -DTON_SDK_VERSION="${TON_SDK_VERSION}" \
+  -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}" \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
   -DTON_SKIP_TESTS=${SKIP_TESTS} \
   -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \

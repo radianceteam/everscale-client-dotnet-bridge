@@ -7,7 +7,6 @@ endif ()
 project(tonclient_dotnet_bridge VERSION ${TON_SDK_VERSION})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
-list(APPEND CMAKE_PREFIX_PATH "${INSTALL_PREFIX}")
 
 include_directories(include)
 enable_testing()

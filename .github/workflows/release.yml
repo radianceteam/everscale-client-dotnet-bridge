@@ -2,8 +2,10 @@ name: Release
 
 on:
   push:
-    branches-ignore: *
-    tags: *.*.* # push to versioned tag will trigger this build
+    branches-ignore:
+      - '*'
+    tags:
+      - '*.*.*' # push to versioned tag will trigger this build
 
 jobs:
   build:
