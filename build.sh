@@ -3,7 +3,7 @@
 set -e
 
 function usage() {
-  echo "Usage: build.sh [-S] [-T] [-s] [-c] [-l] <TON SDK VERSION>"
+  echo "Usage: build.sh [-c] [-I] <TON SDK VERSION>"
   exit 1
 }
 
