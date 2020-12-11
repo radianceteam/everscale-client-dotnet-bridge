@@ -35,7 +35,7 @@ else ()
     set(TON_SDK_RELEASE_DIR "${TON_SDK_SRC}/target/release")
 endif ()
 
-set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client/client")
+set(TON_SDK_CLIENT_DIR "${TON_SDK_SRC}/ton_client")
 
 install(FILES "${TON_SDK_CLIENT_DIR}/tonclient.h" DESTINATION include)
 
