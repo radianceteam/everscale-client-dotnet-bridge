@@ -30,7 +30,7 @@ jobs:
           }
           - {
             name: "Ubuntu x64",
-            os: ubuntu-latest,
+            os: ubuntu-18.04,
             build_command: "./build.sh",
             archive_name: "tonclient_dotnet_bridge_linux_x64"
           }
