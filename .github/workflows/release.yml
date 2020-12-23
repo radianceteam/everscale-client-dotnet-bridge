@@ -19,26 +19,26 @@ jobs:
             name: "Windows x64",
             os: windows-latest,
             build_command: "cmd.exe /c '\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat\" && build.bat x64'",
-            archive_name: "tonclient_dotnet_bridge_windows_x64"
+            archive_name_prefix: "tonclient_dotnet_bridge_windows_x64"
           }
           - {
             name: "Windows x86",
             os: windows-latest,
             init_command: "rustup install stable-i686-pc-windows-msvc",
             build_command: "cmd.exe /c '\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars32.bat\" && build.bat x86'",
-            archive_name: "tonclient_dotnet_bridge_windows_x86"
+            archive_name_prefix: "tonclient_dotnet_bridge_windows_x86"
           }
           - {
             name: "Ubuntu x64",
             os: ubuntu-18.04,
             build_command: "./build.sh",
-            archive_name: "tonclient_dotnet_bridge_linux_x64"
+            archive_name_prefix: "tonclient_dotnet_bridge_linux_x64"
           }
           - {
             name: "macOS x64",
             os: macos-latest,
             build_command: "./build.sh",
-            archive_name: "tonclient_dotnet_bridge_macos_x64"
+            archive_name_prefix: "tonclient_dotnet_bridge_macos_x64"
           }
 
     steps:
@@ -68,6 +68,6 @@ jobs:
       - name: Upload Library Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.config.archive_name }}
+          name: ${{ matrix.config.archive_name_prefix }}_${{ steps.vars.outputs.version }}
           path: |
             install
