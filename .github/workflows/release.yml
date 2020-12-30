@@ -62,7 +62,7 @@ jobs:
         if: failure()
         with:
           path: |
-            build/ton-sdk-${{ steps.vars.outputs.tag }}/src/ton-sdk-stamp/ton-sdk-build-*.log
+            build/ton-sdk-${{ steps.vars.outputs.version }}/src/ton-sdk-stamp/ton-sdk-build-*.log
           name: build-logs
 
       - name: Upload Library Artifacts
