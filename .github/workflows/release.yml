@@ -62,12 +62,12 @@ jobs:
         if: failure()
         with:
           path: |
-            build/ton-sdk-${{ steps.vars.outputs.version }}/src/ton-sdk-stamp/ton-sdk-build-*.log
+            build/ton-sdk-${{ steps.vars.outputs.major }}.${{ steps.vars.outputs.minor }}.${{ steps.vars.outputs.patch }}/src/ton-sdk-stamp/ton-sdk-build-*.log
           name: build-logs
 
       - name: Upload Library Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.config.archive_name_prefix }}_${{ steps.vars.outputs.version }}
+          name: ${{ matrix.config.archive_name_prefix }}_${{ steps.vars.outputs.major }}.${{ steps.vars.outputs.minor }}.${{ steps.vars.outputs.patch }}
           path: |
             install
