@@ -47,7 +47,7 @@ jobs:
       - name: Set version
         id: vars
         uses: battila7/get-version-action@v2
-        
+
       - name: Init
         if: matrix.config.init_command
         run: |
@@ -55,7 +55,7 @@ jobs:
 
       - name: Build
         run: |
-          ${{ matrix.config.build_command }} ${{ steps.vars.outputs.version }}
+          ${{ matrix.config.build_command }} ${{ steps.vars.outputs.major }}.${{ steps.vars.outputs.minor }}.${{ steps.vars.outputs.patch }} ${{ steps.vars.outputs.prerelease }}
 
       - name: Upload Logs
         uses: actions/upload-artifact@v2

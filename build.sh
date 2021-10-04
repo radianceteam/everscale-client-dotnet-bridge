@@ -35,6 +35,8 @@ if [ "${TON_SDK_VERSION}" = "" ]; then
   usage
 fi
 
+TON_SDK_BRANCH=$2
+
 CWD=$(pwd)
 
 echo "Building ${PROJECT_NAME}..."
@@ -46,6 +48,7 @@ mkdir -p build
 cd build || exit
 cmake .. \
   -DTON_SDK_VERSION="${TON_SDK_VERSION}" \
+  -DTON_SDK_BRANCH="${TON_SDK_BRANCH}" \
   -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}"
 make
 make install
