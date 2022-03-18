@@ -17,13 +17,13 @@ jobs:
         config:
           - {
             name: "Windows x64",
-            os: windows-latest,
+            os: windows-2019,
             build_command: "cmd.exe /c '\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat\" && build.bat x64'",
             archive_name_prefix: "tonclient_dotnet_bridge_windows_x64"
           }
           - {
             name: "Windows x86",
-            os: windows-latest,
+            os: windows-2019,
             init_command: "rustup install stable-i686-pc-windows-msvc",
             build_command: "cmd.exe /c '\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars32.bat\" && build.bat x86'",
             archive_name_prefix: "tonclient_dotnet_bridge_windows_x86"
